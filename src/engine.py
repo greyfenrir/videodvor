@@ -1,4 +1,5 @@
 # coding=utf-8
+import os.path
 from time import sleep
 from collections import OrderedDict
 from selenium import webdriver
@@ -27,7 +28,8 @@ class Engine:
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-gpu')
         options.set_capability('unhandledPromptBehavior', 'ignore')
-        service = Service(log_file=f'{PROJECT_DIR}\\webdriver.log')
+        log_path = os.path.join(f'{PROJECT_DIR}', 'webdriver.log')
+        service = Service(log_file=log_path)
         self.driver = webdriver.Chrome(service=service, options=options)
         self.driver.implicitly_wait(timeout)
 
@@ -54,6 +56,6 @@ class Engine:
                 self.manager.set_rsc(rsc)
                 self.report_downloader.get_all_new(
                     company=company.name,
-                    txt_periods=self.ordered_reports[company.name][rsc])
+                    txt_periods=self.manager.ordered_reports[company.name][rsc])
         finally:
             self.manager.logout()
