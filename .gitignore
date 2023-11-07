@@ -3,3 +3,5 @@ Download/
 config.cfg
 .idea/
 venv/
+todo.txt
+*log
