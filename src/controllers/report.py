@@ -5,7 +5,7 @@ from time import sleep
 import os
 from selenium.webdriver.common.by import By
 
-from utils import BUTTON, LOG, DOWN_DIR, MONTHS, safe_click, wait_for
+from utils import BUTTON, LOG, DOWN_DIR, SORT_DIR, MONTHS, safe_click, wait_for
 
 
 class ReportBooker:
@@ -125,9 +125,8 @@ class ReportDownloader:
             self.log.warning(f'done. dir: {os.listdir(path=self.download_dir)}')
 
     def _clean_sort_dir(self):
-        sorted_path = os.path.join(self.download_dir, 'sorted')
-        sorted_files = [os.path.join(f"{sorted_path}", f"{f}")
-                        for f in os.listdir(path=sorted_path)]
+        sorted_files = [os.path.join(f"{SORT_DIR}", f"{f}")
+                        for f in os.listdir(path=SORT_DIR)]
         if sorted_files:
             self.log.warning(f'Remove sorted files: {sorted_files}')
             for f in sorted_files:
@@ -191,7 +190,9 @@ class ReportDownloader:
         name_parts = old_name.split('.')
         period = self.ordered_list.pop()  # '08.2023'
         new_name = f"{name_parts[0]}.{period}.{name_parts[2]}"  # НВА_ГОМ.08.2023.xlsx
-        os.rename(f"Download\\{old_name}", f"Download\\sorted\\{new_name}")
+        full_old_name = os.path.join(DOWN_DIR, f"{old_name}")
+        full_new_name = os.path.join(SORT_DIR, f"{new_name}")
+        os.rename(full_old_name, full_new_name)
 
     def _wait_for_readiness(self):
         queue_xpath = self._get_block_xpath("Очередь на выполнение", postfix='')

@@ -53,7 +53,7 @@ class OrderHandler:
 
 
 def read_config():
-    with open('config.cfg', mode='r', encoding='utf-8') as _f:
+    with open('../config.cfg', mode='r', encoding='utf-8') as _f:
         companies = _f.read()
 
     return eval(companies)

@@ -8,19 +8,18 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException,
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as econd
 
-PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
+PROJECT_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
 DOWN_DIR = os.path.join(f"{PROJECT_DIR}", "Download")
+SORT_DIR = os.path.join(f"{PROJECT_DIR}", "reports")
+
 BUTTON = 'div[contains(@class, "v-button")]'
 
-LOG = logging.getLogger('_d_')
+LOG = logging.getLogger('')
 LOG.setLevel(logging.INFO)
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
 fileHandler = logging.FileHandler("{0}/{1}.log".format(PROJECT_DIR, "just_log"))
 fileHandler.setFormatter(logFormatter)
 LOG.addHandler(fileHandler)
-consoleHandler = logging.StreamHandler()
-consoleHandler.setFormatter(logFormatter)
-LOG.addHandler(consoleHandler)
 
 
 MONTHS = ['ЯНВАРЬ', 'ФЕВРАЛЬ', 'МАРТ', 'АПРЕЛЬ', 'МАЙ', 'ИЮНЬ',

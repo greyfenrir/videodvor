@@ -1,17 +1,13 @@
 # coding=utf-8
-
 from time import sleep
 from collections import OrderedDict
+from selenium import webdriver
 
 from selenium.webdriver.common.by import By
-
-from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
-from utils import DOWN_DIR, PROJECT_DIR
-
-from report import ReportBooker, ReportDownloader
-from utils import BUTTON, LOG, safe_click, waiter, wait_for
+from controllers.report import ReportBooker, ReportDownloader
+from utils import DOWN_DIR, PROJECT_DIR, BUTTON, LOG, safe_click, waiter, wait_for
 
 
 class Engine:
