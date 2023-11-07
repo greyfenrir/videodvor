@@ -1,5 +1,7 @@
-from order import OrderHandler
 import PySimpleGUI as sg
+
+from order import OrderHandler
+from utils import LOG
 
 
 def gui():
@@ -23,4 +25,7 @@ def gui():
 
 
 if __name__ == "__main__":
+
+    LOG.info('\nGUI started..')
     gui()
+    LOG.info('GUI stopped.')
