@@ -37,13 +37,29 @@ class Login(WebController):
         self.wait_for('visible', enter_button_xpath, 20)
         self.driver.find_element(By.XPATH, enter_button_xpath).click()
 
+    def _close_new_feature_notification(self):
+        # new feature closing xpath:
+        xpath = '//div[contains(@class, "v-button-blue-button")]//span[text()="Закрыть"]/../..'
+        notifications = self.driver.find_element(By.XPATH, xpath)
+        if notifications:
+            notifications[0].click()
+
     def get_rscs(self):
         self.log.info('get rscs...')
-        # new feature closing xpath: "//div[contains(@class, "v-button-blue-button")]//span[text()="Закрыть"]/../.."
+
         xpath = '//div[@location="id_2"]//div[@class="v-filterselect-button"]'
-        self.wait_for('clickable', xpath, 40)
-        rsc_button = self.driver.find_element(By.XPATH, xpath)
-        rsc_button.click()
+        try:
+            self.wait_for('clickable', xpath, 40)
+        except:
+            pass    # agent without rsc is possible
+
+        self._close_new_feature_notification()
+
+        rsc_buttons = self.driver.find_elements(By.XPATH, xpath)
+
+        if not rsc_buttons:
+            return ['']     # agent has no rsc
+        rsc_buttons[0].click()
         self.log.info('rsc_button clicked..1')
 
         elements = self.driver.find_elements(By.XPATH, '//td[contains(@class, "gwt-MenuItem")]')
@@ -63,6 +79,9 @@ class Login(WebController):
 
     def set_rsc(self, rsc):
         self.log.info(f'target rsc: "{rsc}"')
+        if not rsc:
+            return  # agent without rsc, setup must be skipped
+
         xpath = '//div[@location="id_2"]//div[@class="v-filterselect-button"]'
         self.wait_for('clickable', xpath, 20)
 
