@@ -1,4 +1,3 @@
-
 from engine import Engine
 
 
@@ -58,6 +57,3 @@ def read_config():
         companies = _f.read()
 
     return eval(companies)
-
-
-OrderHandler().run()
