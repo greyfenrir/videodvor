@@ -1,0 +1,12 @@
+execution:
+- executor: selenium
+  scenario: sc
+
+scenarios:
+  sc:
+    script: test_rw.py
+
+modules:
+  selenium:
+    chromedriver:
+      version: 109.0.5414.74

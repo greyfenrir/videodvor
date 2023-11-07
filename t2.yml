@@ -1,0 +1,16 @@
+execution:
+- executor: selenium
+  scenario: sc
+
+scenarios:
+  sc:
+    requests:
+    - label: login_label
+      actions:
+      - go(https://mail.ru)
+      - waitForByXPath(//my/xpath, visible): 20s
+
+modules:
+  selenium:
+    chromedriver:
+      version: 109.0.5414.74
