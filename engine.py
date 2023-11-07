@@ -4,8 +4,6 @@ from time import sleep
 from collections import OrderedDict
 
 from selenium.webdriver.common.by import By
-from bzt.resources.selenium_extras import waiter, wait_for
-import apiritif
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -13,7 +11,7 @@ from selenium.webdriver.chrome.service import Service
 from utils import DOWN_DIR, PROJECT_DIR
 
 from report import ReportBooker, ReportDownloader
-from utils import BUTTON, LOG, safe_click
+from utils import BUTTON, LOG, safe_click, waiter, wait_for
 
 
 class Engine:

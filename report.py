@@ -4,9 +4,8 @@ from time import sleep
 
 import os
 from selenium.webdriver.common.by import By
-from bzt.resources.selenium_extras import wait_for
 
-from utils import BUTTON, LOG, DOWN_DIR, MONTHS, safe_click
+from utils import BUTTON, LOG, DOWN_DIR, MONTHS, safe_click, wait_for
 
 
 class ReportBooker:
