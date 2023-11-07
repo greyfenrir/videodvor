@@ -32,8 +32,7 @@ class Engine:
         service = Service(log_file=f'{PROJECT_DIR}\\webdriver.log')
         self.driver = webdriver.Chrome(service=service, options=options)
         self.driver.implicitly_wait(timeout)
-        apiritif.put_into_thread_store(
-            timeout=timeout, func_mode=False, driver=self.driver, windows={}, scenario_name='login')        
+
         self.ordered_reports = ordered_reports
         self.log = LOG
         self.report_booker = ReportBooker(driver=self.driver)
@@ -70,27 +69,27 @@ class Engine:
 
     def _login(self, login, password):
         self.driver.get('http://10.54.7.34:7777/ScReportWizard/#!login')
-        waiter()
+        waiter(self.driver, 40)
         sleep(3.0)
 
         login_xpath = '//input[contains(@class, "sc-login-form-user")]'
         pass_xpath = '//input[contains(@class, "sc-login-form-password")]'
 
-        wait_for('visible', [{'xpath': login_xpath}], 20.0)
+        wait_for(self.driver, 'visible', login_xpath, 20)
         self.driver.find_element(By.XPATH, login_xpath).send_keys(login)
 
-        wait_for('visible', [{'xpath': pass_xpath}], 20.0)
+        wait_for(self.driver, 'visible', pass_xpath, 20)
         self.driver.find_element(By.XPATH, pass_xpath).send_keys(password)
 
         enter_button_xpath = f'//{BUTTON}//span[text()="Войти"]/../..'
-        wait_for('visible', [{'xpath': enter_button_xpath}], 20.0)
+        wait_for(self.driver, 'visible', enter_button_xpath, 20)
         self.driver.find_element(By.XPATH, enter_button_xpath).click()
 
     def _get_rscs(self):
         self.log.info('get rscs...')
         # new feature closing xpath: "//div[contains(@class, "v-button-blue-button")]//span[text()="Закрыть"]/../.."
         xpath = '//div[@location="id_2"]//div[@class="v-filterselect-button"]'
-        wait_for('clickable', [{'xpath': xpath}], 40)
+        wait_for(self.driver, 'clickable', xpath, 40)
         rsc_button = self.driver.find_element(By.XPATH, xpath)
         rsc_button.click()
         self.log.info('rsc_button clicked..1')
@@ -113,7 +112,7 @@ class Engine:
     def _set_rsc(self, rsc):
         self.log.info(f'target rsc: "{rsc}"')
         xpath = '//div[@location="id_2"]//div[@class="v-filterselect-button"]'
-        wait_for('clickable', [{'xpath': xpath}], 20)
+        wait_for(self.driver, 'clickable', xpath, 20)
         
         sleep(3)
 

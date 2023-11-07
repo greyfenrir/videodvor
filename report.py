@@ -29,7 +29,7 @@ class ReportBooker:
     def _run_report(self, company, month, year):
         # open report execution dialog
         run_xpath = f'//{BUTTON}//span[text()="Выполнить"]/../..'
-        wait_for('clickable', [{'xpath': run_xpath}], 20.0)
+        wait_for(self.driver, 'clickable', run_xpath, 20)
         self.log.warning(f'run_report({company}, {month}, {year})')
         safe_click(self.driver, run_xpath)
 
@@ -40,7 +40,7 @@ class ReportBooker:
 
         # push execute button
         execute_button_xpath = f'//div[@class="popupContent"]//{BUTTON}//span[text()="Выполнить"]/../..'
-        wait_for('clickable', [{'xpath': execute_button_xpath}], 20.0)
+        wait_for(self.driver, 'clickable', execute_button_xpath, 20)
         if len(self.driver.find_elements(By.XPATH, execute_button_xpath)) > 1:
             self.log.warning('more than one execute button found!')
 
@@ -52,14 +52,12 @@ class ReportBooker:
         self.log.info(f'set_interval("{interval}"):')
 
         dropdown_xpath = '//div[contains(@class, "v-filterselect-month-db-selector")]'
-        # wait_for('clickable', [{'xpath': dropdown_xpath}], 20.0)
-        # self.driver.find_element(By.XPATH, dropdown_xpath).click()
         safe_click(driver=self.driver, xpath=dropdown_xpath)
         self.log.warning('selector clicked')
 
         # find line in dropdown and click on it
         interval_xpath = f'//td[contains(@class, "gwt-MenuItem")]/span[text()="{interval}"]/..'
-        wait_for('clickable', [{'xpath': interval_xpath}], 20.0)
+        wait_for(self.driver, 'clickable', interval_xpath, 20)
         target_interval = self.driver.find_element(By.XPATH, interval_xpath)
         target_interval.click()
         self.log.warning('interval chosen!')
@@ -72,11 +70,11 @@ class ReportBooker:
         # input company name
         self.log.warning("waiting for input line...")
         input_line_xpath = f"//{search_panel}/{search_field}"
-        wait_for('visible', [{'xpath': input_line_xpath}], 40.0)
+        wait_for(self.driver, 'visible', input_line_xpath, 40)
 
         sleep(3)
 
-        wait_for('visible', [{'xpath': input_line_xpath}], 40.0)
+        wait_for(self.driver, 'visible', input_line_xpath, 40)
         self.log.warning(f'input company name..({input_line_xpath})')
         self.driver.find_element(By.XPATH, input_line_xpath).send_keys(company)
         self.log.warning('done')
@@ -85,12 +83,12 @@ class ReportBooker:
         self.log.warning('click find button..')
         find_button_xpath = f"//{search_panel}/{search_button}"
         self.log.warning(f"find button xpath: {find_button_xpath}")
-        wait_for('clickable', [{'xpath': find_button_xpath}], 20.0)
+        wait_for(self.driver, 'clickable', find_button_xpath, 20)
         self.driver.find_element(By.XPATH, find_button_xpath).click()
 
         target_span_xpath = f'//div[contains(@class, "v-tree-node-leaf")]//span[contains(text(), "{company}")]'
         self.log.warning(f'target_span_xpath: {target_span_xpath}')
-        wait_for('visible', [{'xpath': target_span_xpath}], 20.0)
+        wait_for(self.driver, 'visible', target_span_xpath, 20)
         target_span = self.driver.find_element(By.XPATH, target_span_xpath)
 
         rsc = target_span.text.split(' ')[-1]
@@ -222,7 +220,7 @@ class ReportDownloader:
         report_button_xpath = f'//{BUTTON}//span[contains(text(), "Отчеты (")]/../..'
         sleep(1.0)
         self.log.info('trying to open report window..')
-        wait_for('clickable', [{'xpath': report_button_xpath}], 40.0)
+        wait_for(self.driver, 'clickable', report_button_xpath, 40)
         if len(self.driver.find_elements(By.XPATH, report_button_xpath)) > 1:
             self.log.warning('more than one report_button found!')
         self.log.info('trying to click..')
