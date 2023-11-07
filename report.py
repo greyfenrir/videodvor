@@ -187,15 +187,10 @@ class ReportDownloader:
                 break
             sleep(1.0)
 
-        self.log.warning(f'downloaed_files: {downloaded_files}')
         old_name = downloaded_files[0]  # НВА_ГОМ..xlsx
-        self.log.warning(f'old_name: {old_name}')
         name_parts = old_name.split('.')
-        self.log.warning(f'name_parts: {name_parts}')
         period = self.ordered_list.pop()  # '08.2023'
-        self.log.warning(f'period: {period} ({len(self.ordered_list)} are rest)')
         new_name = f"{name_parts[0]}.{period}.{name_parts[2]}"  # НВА_ГОМ.08.2023.xlsx
-        self.log.warning(f'new_name: {new_name}')
         os.rename(f"Download\\{old_name}", f"Download\\sorted\\{new_name}")
 
     def _wait_for_readiness(self):
