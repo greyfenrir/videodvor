@@ -1,3 +1,6 @@
+import os.path
+
+from utils import PROJECT_DIR
 from engine import Engine
 
 
@@ -53,7 +56,8 @@ class OrderHandler:
 
 
 def read_config():
-    with open('../config.cfg', mode='r', encoding='utf-8') as _f:
+    config_path = os.path.join(PROJECT_DIR, 'config.cfg')
+    with open(config_path, mode='r', encoding='utf-8') as _f:
         companies = _f.read()
 
     return eval(companies)
