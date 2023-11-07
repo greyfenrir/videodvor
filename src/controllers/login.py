@@ -59,16 +59,14 @@ class Login(WebController):
 
         if not rsc_buttons:
             return ['']     # agent has no rsc
-        rsc_buttons[0].click()
+
+        rsc_button = rsc_buttons[0]
+        rsc_buttons.click()
         self.log.info('rsc_button clicked..1')
 
-        elements = self.driver.find_elements(By.XPATH, '//td[contains(@class, "gwt-MenuItem")]')
         rscs = list()
 
-        prev_page_xpath = '//div[@class="v-filterselect-prevpage"]/span[text()="Prev"]/..'
-        next_page_xpath = '//div[@class="v-filterselect-nextpage"]/span[text()="Next"]/..'
-
-        for element in elements:
+        for element in self._rsc_variants():
             span = element.find_element(By.XPATH, './/span')
             rscs.append(span.text)
 
@@ -76,6 +74,34 @@ class Login(WebController):
         self.log.info(f'rsc_button clicked..2. rscs: {rscs}')
 
         return rscs
+
+    def _rsc_variants(self):
+        prev_page_xpath = '//div[@class="v-filterselect-prevpage"]/span[text()="Prev"]/..'
+        next_page_xpath = '//div[@class="v-filterselect-nextpage"]/span[text()="Next"]/..'
+        rsc_option_xpath = '//td[contains(@class, "gwt-MenuItem")]'
+
+        # scroll backward
+        while True:
+            sleep(1)
+            prev_elements = self.driver.find_elements(By.XPATH, prev_page_xpath)
+            if prev_elements:
+                prev_elements[0].click()
+            else:
+                break
+
+        while True:
+            sleep(1)
+            # return options
+            options = self.driver.find_elements(By.XPATH, rsc_option_xpath)
+            for option in options:
+                yield option
+
+            # scroll forward
+            next_elements = self.driver.find_elements(By.XPATH, next_page_xpath)
+            if next_elements:
+                next_elements[0].click()
+            else:
+                break
 
     def set_rsc(self, rsc):
         self.log.info(f'target rsc: "{rsc}"')
@@ -92,12 +118,11 @@ class Login(WebController):
             rsc_b.click()
             sleep(1.0)
             xpath = '//td[contains(@class, "gwt-MenuItem")]'
-            elements = self.driver.find_elements(By.XPATH, xpath)
+            elements = list(self._rsc_variants())
             if elements:
                 break
         self.log.info(f'len of rscs: {len(elements)}')
         for element in elements:
-            # sleep(1)
             span_elements = element.find_elements(By.XPATH, './/span')
             for span in span_elements:
                 if span.text == rsc:

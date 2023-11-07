@@ -33,7 +33,6 @@ class Engine:
         self.driver = webdriver.Chrome(service=service, options=options)
         self.driver.implicitly_wait(timeout)
 
-        self.log = LOG
         self.manager = Login(self.driver, ordered_reports)
         self.report_booker = ReportBooker(driver=self.driver)
         self.report_downloader = ReportDownloader(driver=self.driver)        
@@ -59,3 +58,4 @@ class Engine:
                     txt_periods=self.manager.ordered_reports[company.name][rsc])
         finally:
             self.manager.logout()
+            self.driver.quit()
