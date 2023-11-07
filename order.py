@@ -21,7 +21,7 @@ class Order:
         # todo: read it from config file instead
         companies = read_config()
         company = 'НВА'
-        login, password = COMPANIES[company]
+        login, password = companies[company]
         self.companies.append(Company(company=company, login=login, password=password))
         start_period = '03.2023'
         end_period = '05.2023'
@@ -51,6 +51,13 @@ class OrderHandler:
     def run(self):
         for company in self.order.companies:
             company.get_reports(self.engine, self.order.periods)
+
+
+def read_config():
+    with open('config.cfg', 'r+') as _f:
+        companies = _f.read()
+
+    return eval(companies)
 
 
 OrderHandler().run()
