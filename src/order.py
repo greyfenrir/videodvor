@@ -22,7 +22,7 @@ class Order:
     def configure(self):
         # todo: read it from config file instead
         companies = read_config()
-        company = 'НВА'
+        company = 'НВА' # АРБ-0 СВС-multi
         login, password = companies[company]
         self.companies.append(Company(company=company, login=login, password=password))
         start_period = '03.2023'

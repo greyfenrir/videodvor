@@ -66,11 +66,8 @@ class ReportBooker(WebController):
         # input company name
         self.log.warning("waiting for input line...")
         input_line_xpath = f"//{search_panel}/{search_field}"
-        self.wait_for('visible', input_line_xpath, 40)
-
-        sleep(3)
-
-        self.wait_for('visible', input_line_xpath, 40)
+        self.wait_for('visible', input_line_xpath, 60)
+        
         self.log.warning(f'input company name..({input_line_xpath})')
         self.driver.find_element(By.XPATH, input_line_xpath).send_keys(company)
         self.log.warning('done')
