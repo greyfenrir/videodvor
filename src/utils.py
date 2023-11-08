@@ -13,5 +13,9 @@ fileHandler.setFormatter(logFormatter)
 LOG.addHandler(fileHandler)
 
 
+LOG.info(f'PROJECT_DIR: "{PROJECT_DIR}"')
+LOG.info(f'DOWN_DIR: "{DOWN_DIR}"')
+LOG.info(f'SORT_DIR: "{SORT_DIR}"')
+
 MONTHS = ['ЯНВАРЬ', 'ФЕВРАЛЬ', 'МАРТ', 'АПРЕЛЬ', 'МАЙ', 'ИЮНЬ',
           'ИЮЛЬ', 'АВГУСТ', 'СЕНТЯБРЬ', 'ОКТЯБРЬ', 'НОЯБРЬ', 'ДЕКАБРЬ']

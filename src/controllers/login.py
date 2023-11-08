@@ -40,9 +40,11 @@ class Login(WebController):
     def _close_new_feature_notification(self):
         # new feature closing xpath:
         xpath = '//div[contains(@class, "v-button-blue-button")]//span[text()="Закрыть"]/../..'
-        notifications = self.driver.find_element(By.XPATH, xpath)
+        notifications = self.driver.find_elements(By.XPATH, xpath)
         if notifications:
+            self.log.info('new version notification closed')
             notifications[0].click()
+            
 
     def get_rscs(self):
         self.log.info('get rscs...')
@@ -61,7 +63,7 @@ class Login(WebController):
             return ['']     # agent has no rsc
 
         rsc_button = rsc_buttons[0]
-        rsc_buttons.click()
+        rsc_button.click()
         self.log.info('rsc_button clicked..1')
 
         rscs = list()

@@ -18,9 +18,10 @@ class Engine:
         timeout = 2.0
         options = webdriver.ChromeOptions()
         options.add_experimental_option("prefs", {
-            "download.default_directory": DOWN_DIR,
+            "download.default_directory": "C:\\Users\\user\\Documents\\videodvor",
             "download.prompt_for_download": False,
             "download.directory_upgrade": True,
+            "safebrowsing_for_trusted_sources_enabled": False,
             "safebrowsing.enabled": False,
             "safebrowsing.disable_download_protection": True
         })
