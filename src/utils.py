@@ -24,6 +24,7 @@ MONTHS = ['ЯНВАРЬ', 'ФЕВРАЛЬ', 'МАРТ', 'АПРЕЛЬ', 'МАЙ'
 class Configuration:
     def __init__(self):
         self.companies = dict()
+        self.periods = '02.2023', '04.2023'
         self.read_config()
 
     def read_config(self):

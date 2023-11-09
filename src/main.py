@@ -11,7 +11,13 @@ def gui():
                        expand_x=True, enable_events=True, readonly=False, key='combo')
         return lst
 
-    layout = [[sg.Text("Manage Chrome")], [get_combo()], [sg.Button("Start")]]
+    periods = configuration.periods
+    layout = [
+        [sg.Text("Manage Chrome")],
+        [get_combo()],
+        [sg.Text("Start:"), sg.InputText(periods[0], key="start")],
+        [sg.Text("End:"), sg.InputText(periods[1], key="end")],
+        [sg.Button("Start")]]
 
     # Create the window
     window = sg.Window("Emulator", layout)
@@ -22,7 +28,10 @@ def gui():
         # End program if user closes window or
         # presses the OK button
         if event == "Start":
-            OrderHandler().run(values['combo'])
+            company_name = values['combo']
+            p_start, p_end = values['start'], values['end']
+            configuration.periods = p_start, p_end
+            OrderHandler().run(company_name=company_name)
             break
         if event == sg.WIN_CLOSED:
             break

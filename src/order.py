@@ -1,6 +1,6 @@
 import os.path
 
-from utils import configuration
+from utils import configuration, LOG
 from engine import Engine
 
 
@@ -23,9 +23,7 @@ class Order:
 class OrderHandler:
     def __init__(self):
         self.companies = list()
-        start_period = '03.2023'
-        end_period = '05.2023'
-        self.num_periods = self.get_periods(start_p=start_period, end_p=end_period)
+        self.num_periods = list()
         self.ordered_reports = dict()
         self.engine = Engine(ordered_reports=self.ordered_reports)
 
@@ -45,6 +43,10 @@ class OrderHandler:
         return periods
 
     def run(self, company_name):
+        start_p = configuration.periods[0]
+        end_p = configuration.periods[1]
+        LOG.info(f'OrderHandler.run() target: {company_name} ({start_p}-{end_p})')
+        self.num_periods = self.get_periods(start_p=start_p, end_p=end_p)
         login, password = configuration.companies[company_name]
         company = Company(company=company_name, login=login, password=password)
         self.companies.append(company)
