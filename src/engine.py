@@ -42,23 +42,21 @@ class Engine:
         self.manager.login(login=company.login, password=company.password)
         try:
             list_of_rscs = self.manager.get_rscs()
-            # self.manager.ordered_reports[company.name] = OrderedDict()
-            #
-            # for rsc in list_of_rscs:
-            #     self.manager.set_rsc(rsc)
-            #     self.manager.ordered_reports[company.name][rsc] = list()
-            #     self.report_booker.book(
-            #         company=company.name,
-            #         periods=periods,
-            #         txt_periods=self.manager.ordered_reports[company.name][rsc])
-            #
-            # for rsc in list_of_rscs:
-            #     self.manager.set_rsc(rsc)
-            #     self.report_downloader.get_all_new(
-            #         company=company.name,
-            #         txt_periods=self.manager.ordered_reports[company.name][rsc])
-            ordered = ['май 2018', 'июнь 2014']
-            self.report_downloader.get_all_new(company=company.name, txt_periods=ordered)
+            self.manager.ordered_reports[company.name] = OrderedDict()
+
+            for rsc in list_of_rscs:
+                self.manager.set_rsc(rsc)
+                self.manager.ordered_reports[company.name][rsc] = list()
+                self.report_booker.book(
+                    company=company.name,
+                    periods=periods,
+                    txt_periods=self.manager.ordered_reports[company.name][rsc])
+
+            for rsc in list_of_rscs:
+                self.manager.set_rsc(rsc)
+                self.report_downloader.get_all_new(
+                    company=company.name,
+                    txt_periods=self.manager.ordered_reports[company.name][rsc])
 
         finally:
             self.manager.logout()

@@ -1,11 +1,17 @@
 import PySimpleGUI as sg
 
 from order import OrderHandler
-from utils import LOG
+from utils import LOG, configuration
 
 
 def gui():
-    layout = [[sg.Text("Manage Chrome")], [sg.Button("Start")]]
+    def get_combo():
+        names = list(configuration.companies.keys())
+        lst = sg.Combo(names, default_value=names[0], font=('Arial Bold', 14),
+                       expand_x=True, enable_events=True, readonly=False, key='combo')
+        return lst
+
+    layout = [[sg.Text("Manage Chrome")], [get_combo()], [sg.Button("Start")]]
 
     # Create the window
     window = sg.Window("Emulator", layout)
@@ -16,7 +22,7 @@ def gui():
         # End program if user closes window or
         # presses the OK button
         if event == "Start":
-            OrderHandler().run()
+            OrderHandler().run(values['combo'])
             break
         if event == sg.WIN_CLOSED:
             break

@@ -19,3 +19,19 @@ LOG.info(f'SORT_DIR: "{SORT_DIR}"')
 
 MONTHS = ['ЯНВАРЬ', 'ФЕВРАЛЬ', 'МАРТ', 'АПРЕЛЬ', 'МАЙ', 'ИЮНЬ',
           'ИЮЛЬ', 'АВГУСТ', 'СЕНТЯБРЬ', 'ОКТЯБРЬ', 'НОЯБРЬ', 'ДЕКАБРЬ']
+
+
+class Configuration:
+    def __init__(self):
+        self.companies = dict()
+        self.read_config()
+
+    def read_config(self):
+        config_path = os.path.join(PROJECT_DIR, 'config.cfg')
+        with open(config_path, mode='r', encoding='utf-8') as _f:
+            companies = _f.read()
+
+        self.companies = eval(companies)
+
+
+configuration = Configuration()

@@ -47,8 +47,9 @@ class Login(WebController):
             
 
     def get_rscs(self):
-        self.log.info('get rscs...')
+        self.log.info('get_rscs()')
 
+        self.log.info('press dropdown button..')
         xpath = '//div[@location="id_2"]//div[@class="v-filterselect-button"]'
         try:
             self.wait_for('clickable', xpath, 40)
@@ -64,16 +65,19 @@ class Login(WebController):
 
         rsc_button = rsc_buttons[0]
         rsc_button.click()
-        self.log.info('rsc_button clicked..1')
+        self.log.info('dropdown button clicked')
 
         rscs = list()
+        self.log.info('get rscs...')
 
         for element in self._rsc_variants():
             span = element.find_element(By.XPATH, './/span')
             rscs.append(span.text)
 
+        self.log.info(f'result rscs list: {rscs}[{len(rscs)}]')
+        self.log.info('press dropdown button (to close)..')
         rsc_button.click()
-        self.log.info(f'rsc_button clicked..2. rscs: {rscs}')
+        self.log.info('dropdown button clicked again (to close)')
 
         return rscs
 
