@@ -114,22 +114,26 @@ class Login(WebController):
         if not rsc:
             return  # agent without rsc, setup must be skipped
 
-        xpath = '//div[@location="id_2"]//div[@class="v-filterselect-button"]'
-        self.wait_for('clickable', xpath, 60)
+        rsc_xpath = '//div[@location="id_2"]//div[@class="v-filterselect-button"]'
+        self.wait_for('visible', rsc_xpath, 60)
+        self.log.info(f'dropdown button is visible)')
 
-        rsc_b = self.driver.find_element(By.XPATH, xpath)
+        #rsc_b = self.driver.find_element(By.XPATH, xpath)
         while True:
-            rsc_b.click()
+            #rsc_b.click()
+            self.safe_click(rsc_xpath)
             sleep(1.0)
-            xpath = '//td[contains(@class, "gwt-MenuItem")]'
-            elements = self.driver.find_elements(By.XPATH, xpath)
+            item_xpath = '//td[contains(@class, "gwt-MenuItem")]'
+            elements = self.driver.find_elements(By.XPATH, item_xpath)
             if elements:
-                break        
+                break
+                
+        self.log.info('combobox dropped down')
         for element in self._rsc_variants():
             span_elements = element.find_elements(By.XPATH, './/span')
             for span in span_elements:
                 if span.text == rsc:
-                    self.log.info('rsc found!')
+                    self.log.info('rsc found')
                     element.click()
                     sleep(2)
                     return

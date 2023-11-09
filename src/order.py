@@ -45,7 +45,7 @@ class OrderHandler:
         return periods
 
     def run(self, company_name):
-        login, password = configuration[company_name]
+        login, password = configuration.companies[company_name]
         company = Company(company=company_name, login=login, password=password)
         self.companies.append(company)
         for company in self.companies:
