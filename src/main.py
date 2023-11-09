@@ -32,6 +32,6 @@ def gui():
 
 if __name__ == "__main__":
 
-    LOG.info('\nGUI started..')
+    LOG.info('\n\n\nGUI started..')
     gui()
     LOG.info('GUI stopped.')

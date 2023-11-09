@@ -115,25 +115,23 @@ class Login(WebController):
             return  # agent without rsc, setup must be skipped
 
         xpath = '//div[@location="id_2"]//div[@class="v-filterselect-button"]'
-        self.wait_for('clickable', xpath, 20)
-
-        sleep(3)
+        self.wait_for('clickable', xpath, 60)
 
         rsc_b = self.driver.find_element(By.XPATH, xpath)
         while True:
             rsc_b.click()
             sleep(1.0)
             xpath = '//td[contains(@class, "gwt-MenuItem")]'
-            elements = list(self._rsc_variants())
+            elements = self.driver.find_elements(By.XPATH, xpath)
             if elements:
-                break
-        self.log.info(f'len of rscs: {len(elements)}')
-        for element in elements:
+                break        
+        for element in self._rsc_variants():
             span_elements = element.find_elements(By.XPATH, './/span')
             for span in span_elements:
                 if span.text == rsc:
                     self.log.info('rsc found!')
                     element.click()
+                    sleep(2)
                     return
 
         raise Exception(f"RSC '{rsc}' not found")

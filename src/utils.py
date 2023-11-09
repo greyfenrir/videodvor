@@ -1,7 +1,7 @@
 import logging
 import os
 
-PROJECT_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..')
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 DOWN_DIR = os.path.join(f"{PROJECT_DIR}", "Download")
 SORT_DIR = os.path.join(f"{PROJECT_DIR}", "reports")
 

@@ -69,8 +69,7 @@ class ReportDownloader(WebController):
         self._clean_down_dir()
 
         new_xpath = self._get_block_xpath("Новые")
-        while True:
-            self.log.warning('_download_new_elements whileTrue:')
+        while True:            
             sleep(1.0)
             new_elements = self.driver.find_elements(By.XPATH, new_xpath)
             if not (self.ordered_list and new_elements):
@@ -86,12 +85,14 @@ class ReportDownloader(WebController):
 
     def _rename_file_when_ready(self):
         while True:
+            self.log.info('waiting for file...')
             downloaded_files = [
                 f for f in os.listdir(path=DOWN_DIR) if
                 f.startswith(self.company) and not f.endswith('crdownload')]
             if downloaded_files:
                 if len(downloaded_files) > 1:
                     self.log.warning(f'strange downloaded files: {downloaded_files}')
+                self.log.warning(f'downloaded files: {downloaded_files}')
                 break
             sleep(1.0)
 
@@ -101,6 +102,7 @@ class ReportDownloader(WebController):
         new_name = f"{name_parts[0]}.{period}.{name_parts[2]}"  # НВА_ГОМ.08.2023.xlsx
         full_old_name = os.path.join(DOWN_DIR, f"{old_name}")
         full_new_name = os.path.join(SORT_DIR, f"{new_name}")
+        self.log.info(f'full_old_name: {full_old_name}, full_new_name: {full_new_name}')
         os.rename(full_old_name, full_new_name)
 
     def _wait_for_readiness(self):
@@ -125,7 +127,7 @@ class ReportDownloader(WebController):
         report_button_xpath = f'//{self.BUTTON}//span[contains(text(), "Отчеты (")]/../..'
         sleep(1.0)
         self.log.info('trying to open report window..')
-        self.wait_for('clickable', report_button_xpath, 40)
+        self.wait_for('clickable', report_button_xpath, 60)
         if len(self.driver.find_elements(By.XPATH, report_button_xpath)) > 1:
             self.log.warning('more than one report_button found!')
         self.log.info('trying to click..')
