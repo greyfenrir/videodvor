@@ -56,7 +56,7 @@ def gui():
                 companies = [company_name]
             else:
                 companies = configuration.companies.keys()
-            p_start, p_end = values['start'], values['end']
+            p_start, p_end = values['d_start'], values['d_end']
             OrderHandler(configuration=configuration).run(companies=companies, periods=(p_start, p_end))
             break
         if event == sg.WIN_CLOSED:
