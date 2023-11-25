@@ -1,6 +1,5 @@
 import os.path
 
-import yaml
 import utils
 
 
@@ -12,7 +11,7 @@ def test_read_config():
     old_config_path = utils.Configuration.config_path
 
     try:
-        # utils.Configuration.config_path = new_config_path
+        utils.Configuration.config_path = new_config_path
         configuration = utils.Configuration()
         assert all(company in configuration.companies for company in ('name1', 'name2'))
 
