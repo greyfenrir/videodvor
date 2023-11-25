@@ -1,22 +1,41 @@
 import PySimpleGUI as sg
-
+import datetime
 from order import OrderHandler
-from utils import LOG, Configuration
+from utils import LOG, Configuration, get_periods
 
 
 def gui():
-    def get_combo():
-        names = list(configuration.companies.keys())
+    def dd_companies():
+        names = list(configuration.companies.keys()) + ['Все']
         lst = sg.Combo(names, default_value=names[0], font=('Arial Bold', 14),
-                       expand_x=True, enable_events=True, readonly=False, key='combo')
+                       expand_x=True, enable_events=True, readonly=False, key='d_company')
         return lst
 
-    periods = configuration.periods
+    def dd_start():
+        lst = sg.Combo(periods, default_value=periods[-1], font=('Arial Bold', 14),
+                       expand_x=True, enable_events=True, readonly=False, key='d_start')
+        return lst
+
+    def dd_end():
+        lst = sg.Combo(periods, default_value=periods[-1], font=('Arial Bold', 14),
+                       expand_x=True, enable_events=True, readonly=False, key='d_end')
+        return lst
+
+    date = datetime.datetime.now()
+    cur_year = int(date.strftime("%y"))
+    cur_month = int(date.strftime("%m")) - 1
+    if cur_month == 0:
+        cur_month = 12
+        cur_year -= 1
+    cur_year += 2000
+    num_periods = get_periods(f"{cur_month}.{cur_year-1}", f"{cur_month}.{cur_year}")[1:]
+    periods = [f'{month:02d}.{year}' for month, year in num_periods]
+
     layout = [
         [sg.Text("Manage Chrome")],
-        [get_combo()],
-        [sg.Text("Start:"), sg.InputText(periods[0], key="start")],
-        [sg.Text("End:"), sg.InputText(periods[1], key="end")],
+        [dd_companies()],
+        [sg.Text("Start:"), dd_start()],
+        [sg.Text("End:"), dd_end()],
         [sg.Button("Start")]]
 
     # Create the window
@@ -28,7 +47,11 @@ def gui():
         # End program if user closes window or
         # presses the OK button
         if event == "Start":
-            company_name = values['combo']
+            if periods.index(values['d_start']) > periods.index(values['d_end']):
+                sg.popup_error(f'Неверный порядок периодов')
+                continue
+
+            company_name = values['d_company']
             if company_name in configuration.companies.keys():
                 companies = [company_name]
             else:

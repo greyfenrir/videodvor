@@ -14,7 +14,7 @@ class ReportDownloader(WebController):
         super().__init__(driver=driver)
         self.ordered_list = None
         self.company = None
-        self._clean_sort_dir()
+        # self._clean_sort_dir()
 
     @staticmethod
     def _get_block_xpath(name, postfix='/../../..//div[@class="v-slot"]'):

@@ -1,4 +1,4 @@
-from utils import LOG
+from utils import LOG, get_periods
 from engine import Engine
 
 
@@ -20,25 +20,10 @@ class OrderHandler:
         self.engine = Engine(ordered_reports=self.ordered_reports)
         self.configuration = configuration
 
-    @staticmethod
-    def get_periods(start_p, end_p):
-        periods = []
-        first_m, first_y = [int(part) for part in start_p.split('.')]
-        last_m, last_y = [int(part) for part in end_p.split('.')]
-        periods.append((first_m, first_y))
-        while not (first_m == last_m and first_y == last_y):
-            first_m += 1
-            if first_m > 12:
-                first_m = 1
-                first_y += 1
-
-            periods.append((first_m, first_y))
-        return periods
-
     def run(self, companies, periods):
         start_p, end_p = periods
         LOG.info(f'OrderHandler.run() target: {companies} ({start_p}-{end_p})')
-        self.num_periods = self.get_periods(start_p=start_p, end_p=end_p)
+        self.num_periods = get_periods(start_p=start_p, end_p=end_p)
         for company_name in companies:
             login, password = self.configuration.companies[company_name]
             company = Company(company=company_name, login=login, password=password)

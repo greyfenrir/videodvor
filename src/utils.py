@@ -22,6 +22,21 @@ MONTHS = ['ЯНВАРЬ', 'ФЕВРАЛЬ', 'МАРТ', 'АПРЕЛЬ', 'МАЙ'
           'ИЮЛЬ', 'АВГУСТ', 'СЕНТЯБРЬ', 'ОКТЯБРЬ', 'НОЯБРЬ', 'ДЕКАБРЬ']
 
 
+def get_periods(start_p, end_p):
+    periods = []
+    first_m, first_y = [int(part) for part in start_p.split('.')]
+    last_m, last_y = [int(part) for part in end_p.split('.')]
+    periods.append((first_m, first_y))
+    while not (first_m == last_m and first_y == last_y):
+        first_m += 1
+        if first_m > 12:
+            first_m = 1
+            first_y += 1
+
+        periods.append((first_m, first_y))
+    return periods
+
+
 class Configuration:
     config_path = os.path.join(PROJECT_DIR, 'config.yaml')
 
@@ -35,4 +50,5 @@ class Configuration:
             config = yaml.safe_load(config_file.read())
 
         self.companies = config.get('configuration').get('clients')
+
 
