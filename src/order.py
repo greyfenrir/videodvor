@@ -25,7 +25,8 @@ class OrderHandler:
         LOG.info(f'OrderHandler.run() target: {companies} ({start_p}-{end_p})')
         self.num_periods = get_periods(start_p=start_p, end_p=end_p)
         for company_name in companies:
-            login, password = self.configuration.companies[company_name]
+            login = self.configuration.companies[company_name]['login']
+            password = self.configuration.companies[company_name]['pass']
             company = Company(company=company_name, login=login, password=password)
             self.companies.append(company)
 
