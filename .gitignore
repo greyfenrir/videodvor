@@ -1,7 +1,7 @@
 *pyc
 Download/
 reports/
-config.cfg
+/config.yaml
 .idea/
 venv/
 todo.txt

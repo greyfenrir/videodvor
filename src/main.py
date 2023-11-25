@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 
 from order import OrderHandler
-from utils import LOG, configuration
+from utils import LOG, Configuration
 
 
 def gui():
@@ -29,9 +29,12 @@ def gui():
         # presses the OK button
         if event == "Start":
             company_name = values['combo']
+            if company_name in configuration.companies.keys():
+                companies = [company_name]
+            else:
+                companies = configuration.companies.keys()
             p_start, p_end = values['start'], values['end']
-            configuration.periods = p_start, p_end
-            OrderHandler().run(company_name=company_name)
+            OrderHandler(configuration=configuration).run(companies=companies, periods=(p_start, p_end))
             break
         if event == sg.WIN_CLOSED:
             break
@@ -40,7 +43,7 @@ def gui():
 
 
 if __name__ == "__main__":
-
+    configuration = Configuration()
     LOG.info('\n\n\nGUI started..')
     gui()
     LOG.info('GUI stopped.')

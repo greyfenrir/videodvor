@@ -1,0 +1,8 @@
+configuration:
+  clients:
+    name1:
+      login: l1
+      pass: p1
+    name2:
+      login: l2
+      pass: p2

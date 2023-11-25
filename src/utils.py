@@ -1,5 +1,6 @@
 import logging
 import os
+import yaml
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 DOWN_DIR = os.path.join(f"{PROJECT_DIR}", "Download")
@@ -22,17 +23,16 @@ MONTHS = ['ЯНВАРЬ', 'ФЕВРАЛЬ', 'МАРТ', 'АПРЕЛЬ', 'МАЙ'
 
 
 class Configuration:
+    config_path = os.path.join(PROJECT_DIR, 'config.yaml')
+
     def __init__(self):
         self.companies = dict()
         self.periods = '02.2023', '04.2023'
         self.read_config()
 
     def read_config(self):
-        config_path = os.path.join(PROJECT_DIR, 'config.cfg')
-        with open(config_path, mode='r', encoding='utf-8') as _f:
-            companies = _f.read()
+        with open(self.config_path, 'r+', encoding='utf-8') as config_file:
+            config = yaml.safe_load(config_file.read())
 
-        self.companies = eval(companies)
+        self.companies = config.get('configuration').get('clients')
 
-
-configuration = Configuration()

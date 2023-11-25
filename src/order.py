@@ -1,6 +1,4 @@
-import os.path
-
-from utils import configuration, LOG
+from utils import LOG
 from engine import Engine
 
 
@@ -14,18 +12,13 @@ class Company:
         engine.get_reports_for_periods(company=self, periods=periods)
 
 
-class Order:
-    def __init__(self):
-        self.periods = None
-        self.companies = list()
-
-
 class OrderHandler:
-    def __init__(self):
+    def __init__(self, configuration):
         self.companies = list()
         self.num_periods = list()
         self.ordered_reports = dict()
         self.engine = Engine(ordered_reports=self.ordered_reports)
+        self.configuration = configuration
 
     @staticmethod
     def get_periods(start_p, end_p):
@@ -42,16 +35,15 @@ class OrderHandler:
             periods.append((first_m, first_y))
         return periods
 
-    def run(self, company_name):
-        start_p = configuration.periods[0]
-        end_p = configuration.periods[1]
-        LOG.info(f'OrderHandler.run() target: {company_name} ({start_p}-{end_p})')
+    def run(self, companies, periods):
+        start_p, end_p = periods
+        LOG.info(f'OrderHandler.run() target: {companies} ({start_p}-{end_p})')
         self.num_periods = self.get_periods(start_p=start_p, end_p=end_p)
-        login, password = configuration.companies[company_name]
-        company = Company(company=company_name, login=login, password=password)
-        self.companies.append(company)
+        for company_name in companies:
+            login, password = self.configuration.companies[company_name]
+            company = Company(company=company_name, login=login, password=password)
+            self.companies.append(company)
+
         for company in self.companies:
             company.get_reports(self.engine, self.num_periods)
 
-        for company in self.companies:
-            company.get_reports(self.engine, self.ordered_reports)
