@@ -52,6 +52,19 @@ class WebController:
             if elapsed_time > timeout:
                 raise NoSuchElementException("Timeout occurred while waiting for '%s' condition" % condition)
 
+    def safe_send(self, xpath, text, step_limit=5):
+        step = 0
+        while True:
+            try:
+                self.driver.find_element(By.XPATH, xpath).send_keys(text)
+                return
+            except Exception as exc:
+                step += 1
+                LOG.warning(f'{exc}\ntry again to send "{text}"[{step}')
+                sleep(3)
+                if step > step_limit:
+                    raise exc
+
     def safe_click(self, xpath, step_limit=5):
         step = 0
         while True:

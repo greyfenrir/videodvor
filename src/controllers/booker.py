@@ -69,7 +69,7 @@ class ReportBooker(WebController):
         self.wait_for('visible', input_line_xpath, 60)
         
         self.log.warning(f'input company name..({input_line_xpath})')
-        self.driver.find_element(By.XPATH, input_line_xpath).send_keys(company)
+        self.safe_send(xpath=input_line_xpath, text=company)
         self.log.warning('done')
 
         # click 'find' button
