@@ -33,3 +33,5 @@ class OrderHandler:
         for company in self.companies:
             company.get_reports(self.engine, self.num_periods)
 
+        self.engine.driver.quit()
+

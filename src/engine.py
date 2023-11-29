@@ -60,4 +60,3 @@ class Engine:
 
         finally:
             self.manager.logout()
-            self.driver.quit()
