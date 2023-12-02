@@ -28,7 +28,7 @@ def gui():
         cur_month = 12
         cur_year -= 1
     cur_year += 2000
-    num_periods = get_periods(f"{cur_month}.{cur_year-1}", f"{cur_month}.{cur_year}")[1:]
+    num_periods = get_periods("01.2016", f"{cur_month}.{cur_year}")
     periods = [f'{month:02d}.{year}' for month, year in num_periods]
 
     layout = [
