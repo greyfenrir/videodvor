@@ -4,11 +4,9 @@ from time import sleep, time
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, UnexpectedAlertPresentException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as econd
-
-import os
 from selenium.webdriver.common.by import By
 
-from utils import LOG, DOWN_DIR, SORT_DIR, MONTHS
+from utils import LOG
 
 
 class WebController:

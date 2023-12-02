@@ -20,7 +20,7 @@ class ReportDownloader(WebController):
     def _get_block_xpath(name, postfix='/../../..//div[@class="v-slot"]'):
         report_win = 'div[contains(@class, "v-popupbutton-popup")]'
         block_xpath = '//{rep_win}//span[text()="{span_text}"]'
-        return block_xpath.format(rep_win=report_win, span_text=name)+postfix
+        return block_xpath.format(rep_win=report_win, span_text=name) + postfix
 
     def _clean_down_dir(self):
         self.log.warning('start cleaning..')
@@ -69,7 +69,7 @@ class ReportDownloader(WebController):
         self._clean_down_dir()
 
         new_xpath = self._get_block_xpath("Новые")
-        while True:            
+        while True:
             sleep(1.0)
             new_elements = self.driver.find_elements(By.XPATH, new_xpath)
             if not (self.ordered_list and new_elements):

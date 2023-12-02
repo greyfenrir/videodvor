@@ -1,10 +1,8 @@
 # coding=utf-8
 import os.path
-from time import sleep
 from collections import OrderedDict
 from selenium import webdriver
 
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 
 from controllers.booker import ReportBooker
@@ -36,7 +34,7 @@ class Engine:
 
         self.manager = Login(self.driver, ordered_reports)
         self.report_booker = ReportBooker(driver=self.driver)
-        self.report_downloader = ReportDownloader(driver=self.driver)        
+        self.report_downloader = ReportDownloader(driver=self.driver)
 
     def get_reports_for_periods(self, company, periods):
         self.manager.login(login=company.login, password=company.password)

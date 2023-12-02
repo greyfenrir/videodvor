@@ -1,7 +1,4 @@
 # coding=utf-8
-
-from time import sleep
-
 from selenium.webdriver.common.by import By
 
 from controllers.controller import WebController
