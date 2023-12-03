@@ -12,12 +12,15 @@ class ReportBooker(WebController):
         self._order_reports(company=company, periods=periods, txt_periods=txt_periods)
 
     def _order_reports(self, company, periods, txt_periods):
-        for month, year in periods:
+        for month, year in reversed(periods):
             interval = self._run_report(company, month, year)
 
             if interval:
                 txt_periods.append(interval)  # '08.2023'
                 self.log.info(f'target interval for renaming: "{interval}"')
+            else:
+                self.log.warning(f'skip {company} reports older than {month}.{year}')
+                break
 
     def _run_report(self, company, month, year):
         # open report execution dialog
@@ -27,19 +30,18 @@ class ReportBooker(WebController):
         self.safe_click(run_xpath)
 
         # choose interval
-        self._set_interval(month, year)  # 'ИЮЛЬ 2023'
+        if self._set_interval(month, year):  # 'ИЮЛЬ 2023'
+            # push execute button
+            execute_button_xpath = f'//div[@class="popupContent"]//{self.BUTTON}//span[text()="Выполнить"]/../..'
+            self.wait_for('clickable', execute_button_xpath, 20)
+            if len(self.driver.find_elements(By.XPATH, execute_button_xpath)) > 1:
+                self.log.warning('more than one execute button found!')
 
-        # push execute button
-        execute_button_xpath = f'//div[@class="popupContent"]//{self.BUTTON}//span[text()="Выполнить"]/../..'
-        self.wait_for('clickable', execute_button_xpath, 20)
-        if len(self.driver.find_elements(By.XPATH, execute_button_xpath)) > 1:
-            self.log.warning('more than one execute button found!')
+            self.driver.find_element(By.XPATH, execute_button_xpath).click()
+            self.log.warning('execute button pressed successfully')
 
-        self.driver.find_element(By.XPATH, execute_button_xpath).click()
-        self.log.warning('execute button pressed successfully')
-
-        num_interval = f'{month:02d}.{year}'
-        return num_interval
+            num_interval = f'{month:02d}.{year}'
+            return num_interval
 
     def _set_interval(self, month, year):
         self.log.info(f'set_interval("{month}, {year}"):')
@@ -61,19 +63,33 @@ class ReportBooker(WebController):
             current_year = int(spans[0].text.split(' ')[1])
             if current_year < year:
                 self.log.info(f'{current_year} found, go forward')
-                self.safe_click(xpath=prev_xpath)
+                try:
+                    self.safe_click(xpath=prev_xpath, step_limit=2)
+                except:
+                    self.log.warning('impossible to go forward(')
+                    return
             elif current_year > year:
                 self.log.info(f'{current_year} found, go backward')
-                self.safe_click(xpath=next_xpath)
+                try:
+                    self.log.warning('impossible to go backward(')
+                    self.safe_click(xpath=next_xpath)
+                except:
+                    return
             else:
                 self.log.info(f'{year} found successfully')
                 break   # page with target interval found
 
         interval_xpath = f'//td[contains(@class, "gwt-MenuItem")]/span[text()="{txt_interval}"]/..'
 
-        self.wait_for('clickable', interval_xpath, 20)
-        self.driver.find_element(By.XPATH, interval_xpath).click()
+        try:
+            self.wait_for('clickable', interval_xpath, 5)
+            self.driver.find_element(By.XPATH, interval_xpath).click()
+        except:
+            self.log.warning('impossible to click(')
+            return
+
         self.log.warning('interval chosen!')
+        return txt_interval
 
     def _choose_report(self, company):
         search_panel = 'div[contains(@class, "sc-filter-panel-layout")]'
