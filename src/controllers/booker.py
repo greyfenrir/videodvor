@@ -51,8 +51,8 @@ class ReportBooker(WebController):
         self.log.warning('selector clicked')
 
         # find line in dropdown and click on it
-        prev_xpath = '//div[contains(@class, "v-filterselect-prevpage")]//span[text()=="Prev"]/..'
-        next_xpath = '//div[contains(@class, "v-filterselect-nextpage")]//span[text()=="Next"]/..'
+        prev_xpath = '//div[contains(@class, "v-filterselect-prevpage")]//span[text()="Prev"]/..'
+        next_xpath = '//div[contains(@class, "v-filterselect-nextpage")]//span[text()="Next"]/..'
         while True:
             time.sleep(1)
             span_xpath = f'//td[contains(@class, "gwt-MenuItem")]//span[contains(text(),"20")]'
