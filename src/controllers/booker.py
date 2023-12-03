@@ -20,7 +20,8 @@ class ReportBooker(WebController):
                 self.log.info(f'target interval for renaming: "{interval}"')
             else:
                 self.log.warning(f'skip {company} reports older than {month}.{year}')
-                break
+                close_button_xpath = f'//div[contains(@class, "v-button-rep-cancel-btn")]//span[text()="Закрыть"]/../..'
+                self.safe_click(close_button_xpath)
 
     def _run_report(self, company, month, year):
         # open report execution dialog
@@ -71,9 +72,9 @@ class ReportBooker(WebController):
             elif current_year > year:
                 self.log.info(f'{current_year} found, go backward')
                 try:
-                    self.log.warning('impossible to go backward(')
                     self.safe_click(xpath=next_xpath)
                 except:
+                    self.log.warning('impossible to go backward(')
                     return
             else:
                 self.log.info(f'{year} found successfully')
