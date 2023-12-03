@@ -55,7 +55,7 @@ class ReportBooker(WebController):
         next_xpath = '//div[contains(@class, "v-filterselect-nextpage")]//span[text()=="Next"]/..'
         while True:
             time.sleep(1)
-            span_xpath = f'//td[contains(@class, "gwt-MenuItem")]//span[contains(text(),"20"]'
+            span_xpath = f'//td[contains(@class, "gwt-MenuItem")]//span[contains(text(),"20")]'
             spans = self.driver.find_elements(By.XPATH, span_xpath)
             self.log.info(f'len spans for {txt_interval}: {len(spans)}')
             current_year = spans[0].text.split(' ')[1]
