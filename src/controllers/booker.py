@@ -1,4 +1,5 @@
 # coding=utf-8
+import time
 from selenium.webdriver.common.by import By
 
 from controllers.controller import WebController
@@ -12,12 +13,11 @@ class ReportBooker(WebController):
 
     def _order_reports(self, company, periods, txt_periods):
         for month, year in periods:
-            self._run_report(company, month, year)
+            interval = self._run_report(company, month, year)
 
-            target_interval = f'{month:02d}.{year}'
-            txt_periods.append(target_interval)  # '08.2023'
-
-            self.log.warning(f'target interval for renaming: "{target_interval}"')
+            if interval:
+                txt_periods.append(interval)  # '08.2023'
+                self.log.info(f'target interval for renaming: "{interval}"')
 
     def _run_report(self, company, month, year):
         # open report execution dialog
@@ -27,9 +27,7 @@ class ReportBooker(WebController):
         self.safe_click(run_xpath)
 
         # choose interval
-        target_interval = f'{MONTHS[month - 1]} {year}'
-        self.log.warning(f'target report interval: "{target_interval}"')
-        self._set_interval(target_interval)  # 'ИЮЛЬ 2023'
+        self._set_interval(month, year)  # 'ИЮЛЬ 2023'
 
         # push execute button
         execute_button_xpath = f'//div[@class="popupContent"]//{self.BUTTON}//span[text()="Выполнить"]/../..'
@@ -40,19 +38,41 @@ class ReportBooker(WebController):
         self.driver.find_element(By.XPATH, execute_button_xpath).click()
         self.log.warning('execute button pressed successfully')
 
-    def _set_interval(self, interval):
-        # click on dropdown..
-        self.log.info(f'set_interval("{interval}"):')
+        num_interval = f'{month:02d}.{year}'
+        return num_interval
 
+    def _set_interval(self, month, year):
+        self.log.info(f'set_interval("{month}, {year}"):')
+        txt_interval = f'{MONTHS[month - 1]} {year}'
+
+        # click on dropdown..
         dropdown_xpath = '//div[contains(@class, "v-filterselect-month-db-selector")]'
         self.safe_click(xpath=dropdown_xpath)
         self.log.warning('selector clicked')
 
         # find line in dropdown and click on it
-        interval_xpath = f'//td[contains(@class, "gwt-MenuItem")]/span[text()="{interval}"]/..'
+        prev_xpath = '//div[contains(@class, "v-filterselect-prevpage")]/span[text()=="Prev"]/..'
+        next_xpath = '//div[contains(@class, "v-filterselect-nextpage")]/span[text()=="Next"]/..'
+        while True:
+            time.sleep(1)
+            span_xpath = f'//td[contains(@class, "gwt-MenuItem")]/span[contains(text(),"20"]'
+            spans = self.driver.find_elements(By.XPATH, span_xpath)
+            self.log.info(f'len spans for {txt_interval}: {len(spans)}')
+            current_year = spans[0].text.split(' ')[1]
+            if current_year < year:
+                self.log.info(f'{current_year} found, go forward')
+                self.safe_click(xpath=prev_xpath)
+            elif current_year > year:
+                self.log.info(f'{current_year} found, go backward')
+                self.safe_click(xpath=next_xpath)
+            else:
+                self.log.info(f'{year} found successfully')
+                break   # page with target interval found
+
+        interval_xpath = f'//td[contains(@class, "gwt-MenuItem")]/span[text()="{txt_interval}"]/..'
+
         self.wait_for('clickable', interval_xpath, 20)
-        target_interval = self.driver.find_element(By.XPATH, interval_xpath)
-        target_interval.click()
+        self.driver.find_element(By.XPATH, interval_xpath).click()
         self.log.warning('interval chosen!')
 
     def _choose_report(self, company):
