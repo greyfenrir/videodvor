@@ -23,7 +23,7 @@ def gui():
 
     date = datetime.datetime.now()
     cur_year = int(date.strftime("%y"))
-    cur_month = int(date.strftime("%m")) - 1
+    cur_month = int(date.strftime("%m"))
     if cur_month == 0:
         cur_month = 12
         cur_year -= 1
