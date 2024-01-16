@@ -62,6 +62,7 @@ class ReportBooker(WebController):
             spans = self.driver.find_elements(By.XPATH, span_xpath)
 
             current_year = int(spans[0].text.split(' ')[1])
+            self.log.info(f'len(spans)={len(spans)}')
             if current_year < year:
                 self.log.info(f'{current_year} found, go forward')
                 try:
