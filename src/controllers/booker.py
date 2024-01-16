@@ -64,7 +64,7 @@ class ReportBooker(WebController):
             max_month, max_year = spans[0].text.split(' ')
             min_month, min_year = spans[-1].text.split(' ')
 
-            self.log(f'current page is from {min_month} {min_year} to {max_month} {max_year}')
+            self.log.info(f'current page is from {min_month} {min_year} to {max_month} {max_year}')
 
             if year > max_year or (max_year == year and month > MONTHS.index(max_month)+1) :
                 self.log.info(f'max {max_month} {max_year} found, go forward')
