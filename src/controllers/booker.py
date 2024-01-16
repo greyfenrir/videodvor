@@ -61,17 +61,20 @@ class ReportBooker(WebController):
             span_xpath = f'//td[contains(@class, "gwt-MenuItem")]//span[contains(text(),"20")]'
             spans = self.driver.find_elements(By.XPATH, span_xpath)
 
-            current_year = int(spans[0].text.split(' ')[1])
-            self.log.info(f'len(spans)={len(spans)}')
-            if current_year < year:
-                self.log.info(f'{current_year} found, go forward')
+            max_month, max_year = spans[0].text.split(' ')
+            min_month, min_year = spans[-1].text.split(' ')
+
+            self.log(f'current page is from {min_month} {min_year} to {max_month} {max_year}')
+
+            if year > max_year or (max_year == year and month > MONTHS.index(max_month)+1) :
+                self.log.info(f'max {max_month} {max_year} found, go forward')
                 try:
                     self.safe_click(xpath=prev_xpath, step_limit=2)
                 except:
                     self.log.warning('impossible to go forward(')
                     return
-            elif current_year > year:
-                self.log.info(f'{current_year} found, go backward')
+            elif year < min_year or (min_year == year and month < MONTHS.index(min_month)+1):
+                self.log.info(f'min {min_month} {min_year} found, go backward')
                 try:
                     self.safe_click(xpath=next_xpath)
                 except:
