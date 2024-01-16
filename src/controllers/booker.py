@@ -62,18 +62,20 @@ class ReportBooker(WebController):
             spans = self.driver.find_elements(By.XPATH, span_xpath)
 
             max_month, max_year = spans[0].text.split(' ')
+            max_month, max_year = MONTHS.index(max_month)+1, int(max_year)
             min_month, min_year = spans[-1].text.split(' ')
+            min_month, min_year = MONTHS.index(min_month)+1, int(min_year)
 
             self.log.info(f'current page is from {min_month} {min_year} to {max_month} {max_year}')
 
-            if year > max_year or (max_year == year and month > MONTHS.index(max_month)+1) :
+            if year > max_year or (max_year == year and month > max_month):
                 self.log.info(f'max {max_month} {max_year} found, go forward')
                 try:
                     self.safe_click(xpath=prev_xpath, step_limit=2)
                 except:
                     self.log.warning('impossible to go forward(')
                     return
-            elif year < min_year or (min_year == year and month < MONTHS.index(min_month)+1):
+            elif year < min_year or (min_year == year and month < min_month):
                 self.log.info(f'min {min_month} {min_year} found, go backward')
                 try:
                     self.safe_click(xpath=next_xpath)
